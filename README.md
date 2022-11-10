@@ -3,7 +3,7 @@ Simple image converter to ASCII characters of different colors. <br>
 **WORKS ONLY ON WINDOWS**
 
 ## Running of script
-Use Windows PowerShell or simple Command Line to start this script. Make sure that you have .NET 6 or higher on your PC.
+Use Windows PowerShell or Command Line to start this script. Make sure that you have .NET 6 or higher on your PC.
 
 ### 1. Open bin directory of project
 Example: 
