@@ -5,9 +5,9 @@ Simple image converter to ASCII characters of different colors. <br>
 ## Running of script
 Use Windows PowerShell or Command Line to start this script. Make sure that you have .NET 6 or higher on your PC.
 
-### 1. Open bin directory of project
+### 1. Open the project directory
 Example: 
-> **cd D:\AsciiImage\bin**
+> **cd D:\AsciiImage-v.1.0**
 ### 2. Run the script using following parameters
 First Parameter: Source image path <br>
 Second Parameter: Width of output image in symbols <br>
