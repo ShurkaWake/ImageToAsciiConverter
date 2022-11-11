@@ -2,7 +2,9 @@ using System.Drawing;
 
 namespace AsciiImage;
 
-public class AsciiConverter{
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416")]
+public class AsciiConverter
+{
     Bitmap sourceImage;
     double[,] intensityMatrix;
     ConsoleColor[,] colorsMatrix;
@@ -12,7 +14,8 @@ public class AsciiConverter{
     Dictionary<ConsoleColor, Color> consoleColorsRGB = new Dictionary<ConsoleColor, Color>();
     IEnumerable<char> codeChars;
 
-    public AsciiConverter(string sourcePath, int width, int height, in IEnumerable<char> charsToUse){
+    public AsciiConverter(string sourcePath, int width, int height, in IEnumerable<char> charsToUse)
+    {
         FillConsoleColorsDoctionary();
 
         sourceImage = new Bitmap(sourcePath);
@@ -26,27 +29,36 @@ public class AsciiConverter{
         Parse(sourceImage);
     }
 
-    public ConsoleColor[,] ColorsMatrix{
-        get{
+    public ConsoleColor[,] ColorsMatrix
+    {
+        get
+        {
             return colorsMatrix;
         }
     }
 
-    public char[,] CharsMatrix{
-        get{
+    public char[,] CharsMatrix
+    {
+        get
+        {
             return result;
         }
     }
 
-    private void Parse(Bitmap image){
-        for(int i = 0; i < intensityMatrix.GetLength(0); i++){
-            for(int j = 0; j < intensityMatrix.GetLength(1); j++){
+    private void Parse(Bitmap image)
+    {
+        for(int i = 0; i < intensityMatrix.GetLength(0); i++)
+        {
+            for(int j = 0; j < intensityMatrix.GetLength(1); j++)
+            {
                 ProcessTile(i, j, image);
                 char t;
-                try{
+                try
+                {
                     t = codeChars.ElementAt((int) intensityMatrix[i,j] / (256 / codeChars.Count()));
                 }
-                catch{
+                catch
+                {
                     t = ' ';
                 }
                 result[i, j] = t;
@@ -54,19 +66,23 @@ public class AsciiConverter{
         }
     }
 
-    private void ProcessTile(int x, int y, Bitmap image){
+    private void ProcessTile(int x, int y, Bitmap image)
+    {
         long R = 0;
         long G = 0;
         long B = 0;
         double intensity = 0;
         double pixelsProcessed = 0;
 
-        for(int i = 0; i < tileWidth; i++){
-            for(int j = 0; j < tileHeight; j++){
+        for(int i = 0; i < tileWidth; i++)
+        {
+            for(int j = 0; j < tileHeight; j++)
+            {
                 int currentX = (int) Math.Truncate(x * tileWidth) + i;
                 int currentY = (int) Math.Truncate(y * tileHeight) + j;
 
-                if (IsInBounds(currentX, currentY, image)){
+                if (IsInBounds(currentX, currentY, image))
+                {
                     var pixel = image.GetPixel(currentX, currentY);
                     R += pixel.R;
                     G += pixel.G;
@@ -84,22 +100,27 @@ public class AsciiConverter{
         intensityMatrix[x, y] = intensity / pixelsProcessed;
         colorsMatrix[x, y] = GetConsoleColor(Color.FromArgb((int) R, (int) G, (int) B));
 
-        byte ConvertIntToByteBounds(int number){
+        byte ConvertIntToByteBounds(int number)
+        {
             byte result = 0;
-            if (number < 0){
+            if (number < 0)
+            {
                 result = 0;
             }
-            else if (number > 255){
+            else if (number > 255)
+            {
                 result = 255;
             }
-            else{
+            else 
+            {
                 result = (byte) number;
             }
             return result;
         }
     }
 
-    private bool IsInBounds(int x, int y, Bitmap image){
+    private bool IsInBounds(int x, int y, Bitmap image)
+    {
         return x >= 0 && x < image.Width && y >= 0 && y < image.Height;
     }
     
@@ -116,7 +137,8 @@ public class AsciiConverter{
         );
     }
 
-    private void FillConsoleColorsDoctionary(){
+    private void FillConsoleColorsDoctionary()
+    {
         consoleColorsRGB.Add(ConsoleColor.Black, Color.FromArgb(0x00, 0x00, 0x00));
         consoleColorsRGB.Add(ConsoleColor.DarkBlue, Color.FromArgb(0x00, 0x00, 0x80));
         consoleColorsRGB.Add(ConsoleColor.DarkGreen, Color.FromArgb(0x00, 0x80, 0x00));
@@ -135,13 +157,16 @@ public class AsciiConverter{
         consoleColorsRGB.Add(ConsoleColor.White, Color.FromArgb(0xFF, 0xFF, 0xFF));
     }
 
-    private ConsoleColor GetConsoleColor(Color color){
+    private ConsoleColor GetConsoleColor(Color color)
+    {
         double minDist = double.MaxValue;
         ConsoleColor result = ConsoleColor.White;
 
-        foreach (var elem in consoleColorsRGB){
+        foreach (var elem in consoleColorsRGB)
+        {
             double distance = GetDistanceRGB(elem.Value, color);
-            if(minDist > distance){
+            if (minDist > distance)
+            {
                 minDist = distance;
                 result = elem.Key;
             }
@@ -150,8 +175,9 @@ public class AsciiConverter{
         return result;
     }
 
-    private double GetDistanceRGB(Color a, Color b) {
-        return Math.Sqrt(
+    private double GetDistanceRGB(Color a, Color b) 
+    {
+        return Math.Sqrt (
             Math.Pow(a.R - b.R, 2)
             + Math.Pow(a.G - b.G, 2)
             + Math.Pow(a.B - b.B, 2)
